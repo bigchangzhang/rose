@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.YntTotalMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.YntTotal">
+        <result column="area_name" property="areaName" />
+        <result column="area_code" property="areaCode" />
+        <result column="jg_name" property="jgName" />
+        <result column="jg_code" property="jgCode" />
+        <result column="znqk_year_num" property="znqkYearNum" />
+        <result column="znqk_year_money" property="znqkYearMoney" />
+        <result column="xjhk_year_num" property="xjhkYearNum" />
+        <result column="xjhk_year_money" property="xjhkYearMoney" />
+        <result column="dhhz_year_num" property="dhhzYearNum" />
+        <result column="dhhz_year_money" property="dhhzYearMoney" />
+        <result column="zzhk_year_num" property="zzhkYearNum" />
+        <result column="zzhk_year_money" property="zzhkYearMoney" />
+        <result column="decd_num" property="decdNum" />
+        <result column="decd_year_money" property="decdYearMoney" />
+        <result column="shjf_num" property="shjfNum" />
+        <result column="shjf_year_money" property="shjfYearMoney" />
+        <result column="sbjf_num" property="sbjfNum" />
+        <result column="sbjf_year_money" property="sbjfYearMoney" />
+        <result column="hy_point_num" property="hyPointNum" />
+        <result column="double_ten_proportion" property="doubleTenProportion" />
+        <result column="double_fifty_proportion" property="doubleFiftyProportion" />
+        <result column="double_hundred_proportion" property="doubleHundredProportion" />
+        <result column="bacth_code" property="bacthCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_name, area_code, jg_name, jg_code, znqk_year_num, znqk_year_money, xjhk_year_num, xjhk_year_money, dhhz_year_num, dhhz_year_money, zzhk_year_num, zzhk_year_money, decd_num, decd_year_money, shjf_num, shjf_year_money, sbjf_num, sbjf_year_money, hy_point_num, double_ten_proportion, double_fifty_proportion, double_hundred_proportion, bacth_code
+    </sql>
+
+</mapper>

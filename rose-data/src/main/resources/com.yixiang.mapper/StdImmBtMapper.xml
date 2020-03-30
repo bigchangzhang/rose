@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.StdImmBtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.StdImmBt">
+        <result column="bt_num" property="btNum" />
+        <result column="bt_nm" property="btNm" />
+        <result column="bt_content" property="btContent" />
+        <result column="bt_type" property="btType" />
+        <result column="batch_code" property="batchCode" />
+        <result column="column1" property="column1" />
+        <result column="column2" property="column2" />
+        <result column="column3" property="column3" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        bt_num, bt_nm, bt_content, bt_type, batch_code, column1, column2, column3
+    </sql>
+
+</mapper>
