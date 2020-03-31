@@ -1,10 +1,9 @@
 package com.yixiang.data.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.yixiang.data.entity.YntTrade;
 import com.yixiang.data.mapper.YntTradeMapper;
 import com.yixiang.data.service.IYntTradeService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author zc
- * @since 2020-03-24
+ * @since 2020-03-31
  */
 @Service
 public class YntTradeServiceImpl extends ServiceImpl<YntTradeMapper, YntTrade> implements IYntTradeService {

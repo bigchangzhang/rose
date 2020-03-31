@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ccom.yixiang.data.mapper.YntTradeMapper">
+<mapper namespace="com.yixiang.data.mapper.YntTradeMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.yixiang.data.entity.YntTrade">
         <result column="area" property="area" />
         <result column="trade_name" property="tradeName" />
         <result column="trade_type" property="tradeType" />
-        <result column="COUNT" property="count" />
-        <result column="MIX" property="mix" />
+        <result column="count" property="count" />
+        <result column="mix" property="mix" />
+        <result column="bacth_code" property="bacthCode" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        area, trade_name, trade_type, COUNT, MIX
+        area, trade_name, trade_type, count, mix, bacth_code
     </sql>
 
 </mapper>

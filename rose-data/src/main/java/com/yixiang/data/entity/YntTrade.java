@@ -1,11 +1,9 @@
 package com.yixiang.data.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -13,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zc
- * @since 2020-03-24
+ * @since 2020-03-31
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,14 +38,17 @@ public class YntTrade implements Serializable {
     /**
      * 行业个数
      */
-    @TableField("COUNT")
     private String count;
 
     /**
      * 行业占比
      */
-    @TableField("MIX")
     private String mix;
+
+    /**
+     * 行业占比
+     */
+    private String bacthCode;
 
 
 }

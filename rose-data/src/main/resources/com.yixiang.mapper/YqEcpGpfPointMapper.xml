@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.YqEcpGpfPointMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.YqEcpGpfPoint">
+        <result column="svcpnt_id" property="svcpntId" />
+        <result column="svcpnt_nm" property="svcpntNm" />
+        <result column="svcpnt_adr" property="svcpntAdr" />
+        <result column="user_name" property="userName" />
+        <result column="phone" property="phone" />
+        <result column="lat" property="lat" />
+        <result column="lon" property="lon" />
+        <result column="manage_user_name" property="manageUserName" />
+        <result column="ccbins_id" property="ccbinsId" />
+        <result column="ccbins_chn_shrtnm" property="ccbinsChnShrtnm" />
+        <result column="cardnum" property="cardnum" />
+        <result column="aum" property="aum" />
+        <result column="year_num" property="yearNum" />
+        <result column="jr_city" property="jrCity" />
+        <result column="jr_area" property="jrArea" />
+        <result column="jr_street" property="jrStreet" />
+        <result column="jr_village" property="jrVillage" />
+        <result column="jr_city_name" property="jrCityName" />
+        <result column="jr_area_name" property="jrAreaName" />
+        <result column="jr_street_name" property="jrStreetName" />
+        <result column="jr_village_name" property="jrVillageName" />
+        <result column="bacth_code" property="bacthCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        svcpnt_id, svcpnt_nm, svcpnt_adr, user_name, phone, lat, lon, manage_user_name, ccbins_id, ccbins_chn_shrtnm, cardnum, aum, year_num, jr_city, jr_area, jr_street, jr_village, jr_city_name, jr_area_name, jr_street_name, jr_village_name, bacth_code
+    </sql>
+
+</mapper>

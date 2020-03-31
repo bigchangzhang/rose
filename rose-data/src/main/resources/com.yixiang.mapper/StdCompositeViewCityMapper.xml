@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.StdCompositeViewCityMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.StdCompositeViewCity">
+    <result column="id" property="id" />
+        <result column="report_place" property="reportPlace" />
+        <result column="abscissa_axis" property="abscissaAxis" />
+        <result column="vertical_axis_a" property="verticalAxisA" />
+        <result column="vertical_axis_b" property="verticalAxisB" />
+        <result column="bacth_code" property="bacthCode" />
+        <result column="city_code" property="cityCode" />
+        <result column="city_name" property="cityName" />
+        <result column="column3" property="column3" />
+        <result column="column4" property="column4" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        report_place, abscissa_axis, vertical_axis_a, vertical_axis_b, bacth_code, city_code, city_name, column3, column4
+    </sql>
+
+</mapper>
