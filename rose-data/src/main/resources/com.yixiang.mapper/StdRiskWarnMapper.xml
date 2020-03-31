@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.StdRiskWarnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.StdRiskWarn">
+        <result column="svcpnt_id" property="svcpntId" />
+        <result column="svcpnt_nm" property="svcpntNm" />
+        <result column="trs_date" property="trsDate" />
+        <result column="trs_money" property="trsMoney" />
+        <result column="trs_num" property="trsNum" />
+        <result column="tisk_type" property="tiskType" />
+        <result column="batch_code" property="batchCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        svcpnt_id, svcpnt_nm, trs_date, trs_money, trs_num, tisk_type, batch_code
+    </sql>
+
+</mapper>
