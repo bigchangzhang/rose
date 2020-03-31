@@ -90,10 +90,10 @@ public class StdDistrictController {
             });
 
             ArrayList<Object> objects = new ArrayList<>();
-            //objects.add(cityMap);
-            //objects.add(areaMap);
+            objects.add(cityMap);
+            objects.add(areaMap);
             //objects.add(streetMap);
-            objects.add(villageMap);
+            //objects.add(villageMap);
             log.info("输出地区" + objects);
             resultModel.set(0, "success", objects);
         } catch (Exception e) {
