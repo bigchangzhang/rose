@@ -1,8 +1,7 @@
 package com.yixiang.data.service;
 
-
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yixiang.data.entity.YntTotal;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -10,7 +9,7 @@ import com.yixiang.data.entity.YntTotal;
  * </p>
  *
  * @author zc
- * @since 2020-03-26
+ * @since 2020-04-07
  */
 public interface IYntTotalService extends IService<YntTotal> {
 

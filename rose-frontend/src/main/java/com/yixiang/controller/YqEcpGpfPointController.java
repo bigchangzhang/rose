@@ -38,7 +38,7 @@ public class YqEcpGpfPointController {
     /**
      * 根据区县代码获取服务点列表
      */
-    @ApiOperation(value = "point")
+    @ApiOperation(value = "根据乡镇获取下面所有的服务店")
     @RequestMapping(value = "/getPointList",method = RequestMethod.GET)
     public Object getPointList(String area) {
         ResultModel resultModel = new ResultModel();
@@ -64,7 +64,7 @@ public class YqEcpGpfPointController {
     /**
      * 根据服务点编号获取详细信息
      */
-    @ApiOperation(value = "point")
+    @ApiOperation(value = "服务点详细信息")
     @RequestMapping(value = "/getPointAllInfoByCode",method = RequestMethod.GET)
     public Object getPointAllInfoByCode(String pointCode) {
         ResultModel resultModel = new ResultModel();

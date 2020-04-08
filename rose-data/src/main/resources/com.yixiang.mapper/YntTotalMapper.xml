@@ -18,6 +18,8 @@
         <result column="zzhk_year_money" property="zzhkYearMoney" />
         <result column="decd_num" property="decdNum" />
         <result column="decd_year_money" property="decdYearMoney" />
+        <result column="dk_num" property="dkNum" />
+        <result column="dk_year_money" property="dkYearMoney" />
         <result column="shjf_num" property="shjfNum" />
         <result column="shjf_year_money" property="shjfYearMoney" />
         <result column="sbjf_num" property="sbjfNum" />
@@ -31,7 +33,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        area_name, area_code, jg_name, jg_code, znqk_year_num, znqk_year_money, xjhk_year_num, xjhk_year_money, dhhz_year_num, dhhz_year_money, zzhk_year_num, zzhk_year_money, decd_num, decd_year_money, shjf_num, shjf_year_money, sbjf_num, sbjf_year_money, hy_point_num, double_ten_proportion, double_fifty_proportion, double_hundred_proportion, bacth_code
+        area_name, area_code, jg_name, jg_code, znqk_year_num, znqk_year_money, xjhk_year_num, xjhk_year_money, dhhz_year_num, dhhz_year_money, zzhk_year_num, zzhk_year_money, decd_num, decd_year_money, dk_num, dk_year_money, shjf_num, shjf_year_money, sbjf_num, sbjf_year_money, hy_point_num, double_ten_proportion, double_fifty_proportion, double_hundred_proportion, bacth_code
     </sql>
 
 </mapper>

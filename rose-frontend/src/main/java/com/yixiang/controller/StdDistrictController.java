@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class StdDistrictController {
 
 
     @ApiOperation(value = "获取地区")
-    @RequestMapping("/getList")
+    @RequestMapping(value = "/getList",method = RequestMethod.GET)
     public Object getList() {
         ResultModel resultModel = new ResultModel();
         try {
@@ -90,7 +91,7 @@ public class StdDistrictController {
             });
 
             ArrayList<Object> objects = new ArrayList<>();
-            objects.add(cityMap);
+            //objects.add(cityMap);
             objects.add(areaMap);
             //objects.add(streetMap);
             //objects.add(villageMap);
@@ -105,7 +106,7 @@ public class StdDistrictController {
 
 
     @ApiOperation(value = "获取一个地区")
-    @RequestMapping("/getAreaByCode")
+    @RequestMapping(value = "/getAreaByCode",method = RequestMethod.GET)
     public Object getAreaByCode(String area) {
         ResultModel resultModel = new ResultModel();
         try {
@@ -129,7 +130,7 @@ public class StdDistrictController {
     }
 
     @ApiOperation(value = "通过父级获取父级以下地区")
-    @RequestMapping("/getAreaListByParentCode")
+    @RequestMapping(value = "/getAreaListByParentCode",method = RequestMethod.GET)
     public Object getAreaListByParentCode(String area) {
         ResultModel resultModel = new ResultModel();
         try {

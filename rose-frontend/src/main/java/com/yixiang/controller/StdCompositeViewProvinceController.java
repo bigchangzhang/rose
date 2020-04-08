@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class StdCompositeViewProvinceController {
     IStdCompositeViewCityService iStdCompositeViewCityService;
 
     @ApiOperation(value = "获取地区")
-    @RequestMapping("query")
+    @RequestMapping(value = "query",method = RequestMethod.GET)
     public ResultModel query(String reportPlace, String provinceCode){
         ResultModel resultModel = new ResultModel();
         if (StringUtils.isBlank(reportPlace)) {
@@ -57,8 +58,6 @@ public class StdCompositeViewProvinceController {
             Map<String, List<StdCompositeViewProvince>> collect = list.stream().collect(Collectors.groupingBy(s -> s.getReportPlace()));
             resultModel.set(0, "success", collect);
         }else {
-            //TODO
-            //需要市视图
             QueryWrapper qee = new QueryWrapper();
             qee.eq("report_place",reportPlace);
             qee.eq("city_code",provinceCode);

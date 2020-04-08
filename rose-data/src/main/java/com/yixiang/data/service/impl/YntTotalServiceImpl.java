@@ -1,6 +1,5 @@
 package com.yixiang.data.service.impl;
 
-
 import com.yixiang.data.entity.YntTotal;
 import com.yixiang.data.mapper.YntTotalMapper;
 import com.yixiang.data.service.IYntTotalService;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author zc
- * @since 2020-03-26
+ * @since 2020-04-07
  */
 @Service
 public class YntTotalServiceImpl extends ServiceImpl<YntTotalMapper, YntTotal> implements IYntTotalService {

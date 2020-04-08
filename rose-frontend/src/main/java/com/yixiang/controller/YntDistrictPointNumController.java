@@ -59,31 +59,29 @@ public class YntDistrictPointNumController {
             if (StringUtils.isEmpty(area)) {
                 area = "130000";
             }
+            //查询属于几级机构
             QueryWrapper<StdDistrict> queryWrappers = new QueryWrapper<>();
             queryWrappers.eq("code_value", area);
             StdDistrict one = iStdDistrictService.getOne(queryWrappers);
-            QueryWrapper<StdDistrict> queryWrapper = new QueryWrapper<>();
+
+
+           /* QueryWrapper<StdDistrict> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("parent_code", area);
             List<StdDistrict> ecpJxtRegions = iStdDistrictService.getBaseMapper().selectList(queryWrapper);
-            List<String> collect = ecpJxtRegions.stream().map(r -> r.getCodeValue()).collect(Collectors.toList());
+            List<String> collect = ecpJxtRegions.stream().map(r -> r.getCodeValue()).collect(Collectors.toList());*/
+
             List<YntDistrictPointNum> list = new ArrayList<>();
             QueryWrapper<YntDistrictPointNum> yntDistrictPointNumQueryWrapper = new QueryWrapper<>();
             if ("1".equals(one.getType())){
-                if(collect != null && collect.size()>0){
-                    yntDistrictPointNumQueryWrapper.in("citycode",collect);
-                }
+                list = iYntDistrictPointNumService.selectCity();
             }
             if ("2".equals(one.getType())){
-                if(collect != null && collect.size()>0){
-                    yntDistrictPointNumQueryWrapper.in("areacode",collect);
-                }
+                list = iYntDistrictPointNumService.selectArea(one.getCodeValue());
             }
             if ("3".equals(one.getType())){
-                if(collect != null && collect.size()>0){
-                    yntDistrictPointNumQueryWrapper.in("villagecode",collect);
-                }
+                list = iYntDistrictPointNumService.selectVillage(one.getCodeValue());
             }
-            list = iYntDistrictPointNumService.list(yntDistrictPointNumQueryWrapper);
+            //list = iYntDistrictPointNumService.list(yntDistrictPointNumQueryWrapper);
             resultModel.set(0, "success", list);
         } catch (Exception e) {
             log.error("获取信息失败:{}",e);

@@ -2,6 +2,9 @@ package com.yixiang.data.service;
 
 import com.yixiang.data.entity.YntDistrictPointNum;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-03-31
  */
 public interface IYntDistrictPointNumService extends IService<YntDistrictPointNum> {
+
+    List<YntDistrictPointNum> selectCity();
+
+    List<YntDistrictPointNum> selectArea(String citycode);
+
+    List<YntDistrictPointNum> selectVillage(String areacode);
+
 
 }

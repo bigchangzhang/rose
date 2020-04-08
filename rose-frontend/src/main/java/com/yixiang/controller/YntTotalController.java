@@ -76,7 +76,7 @@ public class YntTotalController {
         ResultModel resultModel = new ResultModel();
         try {
             QueryWrapper<StdDistrict> queryWrapperstd = new QueryWrapper<>();
-            queryWrapperstd.eq("PARENT_CODE","13000000");
+            queryWrapperstd.eq("PARENT_CODE","130000");
             List<StdDistrict> stdDistricts = iStdDistrictService.list(queryWrapperstd);
             if(stdDistricts.isEmpty()){
                 resultModel.set(1, "获取父级信息为空，当前地区{}",null);
@@ -88,7 +88,7 @@ public class YntTotalController {
 
             QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
             queryWrapper.in("area_code",collect);
-            //1助农贷款、2现金汇款、3转账汇款、4定活互转、5裕农快贷、6社保卡、7etc、8药品追溯、9社保缴费
+            //1助农贷款、2现金汇款、3定活互转、4转账汇款、大额存单、6贷款、7生活缴费、8药品追溯、9社保缴费
             //TODO
             if("1".equals(pointIde)){
                 queryWrapper.orderByDesc("znqk_year_num");
@@ -97,24 +97,21 @@ public class YntTotalController {
                 queryWrapper.orderByDesc("xjhk_year_num");
             }
             if("3".equals(pointIde)){
-                queryWrapper.orderByDesc("zzhk_year_num");
-            }
-            if("4".equals(pointIde)){
                 queryWrapper.orderByDesc("dhhz_year_num");
             }
+            if("4".equals(pointIde)){
+                queryWrapper.orderByDesc("zzhk_year_num");
+            }
             if("5".equals(pointIde)){
-                queryWrapper.orderByDesc("ynkd_dkkh_num");
+                queryWrapper.orderByDesc("decd_num");
             }
             if("6".equals(pointIde)){
-                queryWrapper.orderByDesc("sbk_num");
+                queryWrapper.orderByDesc("dk_num");
             }
             if("7".equals(pointIde)){
-                queryWrapper.orderByDesc("etc_qgkh_num");
+                queryWrapper.orderByDesc("shjf_num");
             }
             if("8".equals(pointIde)){
-                queryWrapper.orderByDesc("yp_zs_num");
-            }
-            if("9".equals(pointIde)){
                 queryWrapper.orderByDesc("sbjf_num");
             }
 

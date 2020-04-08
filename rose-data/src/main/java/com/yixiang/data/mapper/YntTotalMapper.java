@@ -1,8 +1,7 @@
 package com.yixiang.data.mapper;
 
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixiang.data.entity.YntTotal;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -10,7 +9,7 @@ import com.yixiang.data.entity.YntTotal;
  * </p>
  *
  * @author zc
- * @since 2020-03-26
+ * @since 2020-04-07
  */
 public interface YntTotalMapper extends BaseMapper<YntTotal> {
 

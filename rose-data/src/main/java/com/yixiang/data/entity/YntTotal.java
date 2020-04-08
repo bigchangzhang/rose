@@ -1,10 +1,9 @@
 package com.yixiang.data.entity;
 
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * <p>
@@ -12,7 +11,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zc
- * @since 2020-03-26
+ * @since 2020-04-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -90,6 +89,16 @@ public class YntTotal implements Serializable {
      * 大额存单本年累计金额
      */
     private String decdYearMoney;
+
+    /**
+     * 贷款本年累计笔数
+     */
+    private String dkNum;
+
+    /**
+     * 贷款本年累计金额
+     */
+    private Double dkYearMoney;
 
     /**
      * 生活缴费本年累计笔数

@@ -34,7 +34,7 @@ public class StdTopController {
         ResultModel resultModel = new ResultModel();
         try {
             QueryWrapper<StdTop> queryWrapper = new QueryWrapper();
-            queryWrapper.orderByAsc("rank");
+            queryWrapper.orderByAsc("rankid");
             List<StdTop> riskWarns = iStdTopService.list(queryWrapper);
             resultModel.set(0, "success", riskWarns);
         }catch (Exception e){
@@ -49,7 +49,7 @@ public class StdTopController {
         ResultModel resultModel = new ResultModel();
         try {
             QueryWrapper<StdTop> queryWrapper = new QueryWrapper();
-            queryWrapper.orderByAsc("rank");
+            queryWrapper.orderByAsc("rankid");
             queryWrapper.eq("area_code",code);
             List<StdTop> riskWarns = iStdTopService.list(queryWrapper);
             resultModel.set(0, "success", riskWarns);

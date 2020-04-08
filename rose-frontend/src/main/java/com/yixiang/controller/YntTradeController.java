@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,13 +35,13 @@ public class YntTradeController {
 
 
     @ApiOperation(value = "获取一个地区的合作视图统计信息")
-    @RequestMapping("/getAreaByCode")
+    @RequestMapping(value = "/getAreaByCode",method = RequestMethod.GET)
     public Object getAreaByCode(String area) {
         ResultModel resultModel = new ResultModel();
         try {
 
             if (StringUtils.isEmpty(area)) {
-                area = "370000";
+                area = "130000";
             }
 
             QueryWrapper<YntTrade> queryWrapper = new QueryWrapper<>();
