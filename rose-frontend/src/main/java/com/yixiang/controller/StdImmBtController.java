@@ -38,8 +38,8 @@ public class StdImmBtController {
         ResultModel resultModel = new ResultModel();
         try {
             List<StdImmBt> btList = iStdImmBtService.list();
-            Map<String, List<StdImmBt>> listMap = btList.stream().collect(Collectors.groupingBy(b -> b.getBtType()));
-/*
+            //Map<String, List<StdImmBt>> listMap = btList.stream().collect(Collectors.groupingBy(b -> b.getBtType()));
+
 
             StdImmBt jRstdImmBt = new StdImmBt();
             StdImmBt bMstdImmBt = new StdImmBt();
@@ -49,7 +49,6 @@ public class StdImmBtController {
             objects.add(jRstdImmBt);
             objects.add(bMstdImmBt);
             objects.add(zWstdImmBt);
-
             objects.add(jZstdImmBt);
 
 
@@ -72,8 +71,8 @@ public class StdImmBtController {
                     jZstdImmBt.setBtType("精准扶贫");
                 }
 
-            }*/
-            resultModel.set(0, "success", listMap);
+            }
+            resultModel.set(0, "success", objects);
         }catch (Exception e){
             log.error("获取信息失败:{}",e);
             resultModel.set(1, "获取信息失败", null);
@@ -85,8 +84,10 @@ public class StdImmBtController {
         Map<String, String> obtMap = new HashMap<>();
         obtMap.put("txt",stdImmBt.getBtNm());
         obtMap.put("dialogTxt",stdImmBt.getBtContent());
-        obtMap.put("id",stdImmBt.getColumn2());
+        obtMap.put("id",stdImmBt.getBtNum());
         obtMap.put("type",stdImmBt.getColumn1());
         jZstdImmBt.getBtmapList().add(obtMap);
     }
+
+
 }

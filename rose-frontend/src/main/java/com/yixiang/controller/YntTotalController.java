@@ -3,8 +3,10 @@ package com.yixiang.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixiang.data.entity.StdDistrict;
+import com.yixiang.data.entity.YntDistrictPointNum;
 import com.yixiang.data.entity.YntTotal;
 import com.yixiang.data.service.IStdDistrictService;
+import com.yixiang.data.service.IYntDistrictPointNumService;
 import com.yixiang.data.service.IYntTotalService;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +44,9 @@ public class YntTotalController {
     @Autowired
     IStdDistrictService iStdDistrictService;
 
+    @Autowired
+    IYntDistrictPointNumService iYntDistrictPointNumService;
+
 
     /**
      * 点击市查询 活跃数量和双十占比
@@ -50,16 +57,46 @@ public class YntTotalController {
         ResultModel resultModel = new ResultModel();
         try {
 
+
             QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
 
             if(StringUtils.isNotEmpty(area)){
                 queryWrapper.eq("area_code", area);
             }else{
+                area="130000";
                 queryWrapper.eq("area_code", "130000");
             }
+            //查询属于几级机构
+            QueryWrapper<StdDistrict> queryWrappers = new QueryWrapper<>();
+            queryWrappers.eq("code_value", area);
+            StdDistrict one = iStdDistrictService.getOne(queryWrappers);
+            YntDistrictPointNum list = new YntDistrictPointNum();
 
-            List<YntTotal> list = iYntTotalService.list(queryWrapper);
-            resultModel.set(0, "success", list);
+            QueryWrapper<YntDistrictPointNum> yntDistrictPointNumQueryWrapper = new QueryWrapper<>();
+            if ("2".equals(one.getType())){
+                list = iYntTotalService.selectCity(one.getCodeValue());
+            }
+            if ("2".equals(one.getType())){
+                list = iYntTotalService.selectArea(one.getCodeValue());
+            }
+            if ("3".equals(one.getType())){
+                list = iYntTotalService.selectVillage(one.getCodeValue());
+            }
+            if ("1".equals(one.getType())){
+                list = iYntTotalService.selectProvaince();
+            }
+            double hyPoint = Double.parseDouble(list.getHyPointNum());
+            double pointNum = Double.parseDouble(list.getPointNum());
+            DecimalFormat df = new DecimalFormat("0.00");
+            String hyPointProportion = df.format(hyPoint/pointNum);
+
+
+            List<YntTotal> listToal = iYntTotalService.list(queryWrapper);
+            for (YntTotal yntTotal : listToal) {
+                yntTotal.setHyPointProportion(hyPointProportion);
+
+            }
+            resultModel.set(0, "success", listToal);
         } catch (Exception e) {
             log.error("获取信息失败:{}",e);
             resultModel.set(1, "获取信息失败", null);
@@ -88,7 +125,7 @@ public class YntTotalController {
 
             QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
             queryWrapper.in("area_code",collect);
-            //1助农贷款、2现金汇款、3定活互转、4转账汇款、大额存单、6贷款、7生活缴费、8药品追溯、9社保缴费
+            //1助农贷款、2现金汇款、3定活互转、4转账汇款、5大额存单、6贷款、7生活缴费、8社保缴费
             //TODO
             if("1".equals(pointIde)){
                 queryWrapper.orderByDesc("znqk_year_num");
@@ -124,5 +161,86 @@ public class YntTotalController {
         return resultModel;
     }
 
+    /**
+     * 根据地区代码获取左屏业务信息，area不传查询等于省370000，
+     * workType业务类型（//1助农贷款、2现金汇款、3定活互转、4转账汇款、5大额存单、6贷款、7生活缴费、8社保缴费）
+     * size查询数量
+     */
+    @ApiOperation(value = "point")
+    @RequestMapping(value = "/getGroupLeftInfoByType",method = RequestMethod.GET)
+    public Object getGroupLeftInfoByType(String workType) {
+        ResultModel resultModel = new ResultModel();
+
+        try {
+
+                String area = "130000";
+
+            if (StringUtils.isEmpty(workType)) {
+                resultModel.set(1, "数据类型不允许为空！", null);
+                return resultModel;
+            }
+
+
+            QueryWrapper<StdDistrict> areaQuery = new QueryWrapper<>();
+            areaQuery.eq("PARENT_CODE",area);
+            List<StdDistrict> areaList = iStdDistrictService.list(areaQuery);
+
+            if(areaList.isEmpty()){
+                resultModel.set(1, "获取父级信息为空，当前地区{}", area);
+                return resultModel;
+            }
+
+            List<String> areaCodes = areaList.stream().map(r -> r.getCodeValue())
+                    .collect(Collectors.toList());
+
+
+            QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
+
+            queryWrapper.in("area_code",areaCodes);
+            //1助农贷款、2现金汇款、3转账汇款、4定活互转、5裕农快贷、6社保卡、7etc、8药品追溯
+            if("1".equals(workType)){
+                queryWrapper.orderByDesc("znqk_year_num");
+            }
+            if("2".equals(workType)){
+                queryWrapper.orderByDesc("xjhk_year_num");
+            }
+            if("3".equals(workType)){
+                queryWrapper.orderByDesc("dhhz_year_num");
+            }
+            if("4".equals(workType)){
+                queryWrapper.orderByDesc("zzhk_year_num");
+            }
+            if("5".equals(workType)){
+                queryWrapper.orderByDesc("decd_num");
+            }
+            if("6".equals(workType)){
+                queryWrapper.orderByDesc("dk_num");
+            }
+            if("7".equals(workType)){
+                queryWrapper.orderByDesc("shjf_num");
+            }
+            if("8".equals(workType)){
+                queryWrapper.orderByDesc("sbjf_num");
+            }
+            //queryWrapper.last("limit " + size);
+            List<YntTotal> list = iYntTotalService.list(queryWrapper);
+
+            List<List<YntTotal>> yntTotals = new ArrayList<>();
+            int toIndex = 4;
+            for (int i = 0; i < list.size(); i+=4) {
+                if (i+4>list.size()) {
+                    toIndex = list.size() - i;
+                }
+                List<YntTotal> newList = list.subList(i, i+toIndex);
+                yntTotals.add(newList);
+            }
+
+            resultModel.set(0, "success", yntTotals);
+        } catch (Exception e) {
+            log.error("获取信息失败:{}",e);
+            resultModel.set(1, "获取信息失败", null);
+        }
+        return resultModel;
+    }
 
 }

@@ -1,9 +1,10 @@
 package com.yixiang.data.entity;
 
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -11,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zc
- * @since 2020-04-07
+ * @since 2020-04-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -124,6 +125,8 @@ public class YntTotal implements Serializable {
      * 活跃点数
      */
     private String hyPointNum;
+
+    private String hyPointProportion;
 
     /**
      * 双十占比

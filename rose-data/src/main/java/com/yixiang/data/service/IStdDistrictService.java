@@ -2,6 +2,9 @@ package com.yixiang.data.service;
 
 import com.yixiang.data.entity.StdDistrict;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yixiang.data.entity.YntDistrictPointNum;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-03-23
  */
 public interface IStdDistrictService extends IService<StdDistrict> {
+
+
 
 }

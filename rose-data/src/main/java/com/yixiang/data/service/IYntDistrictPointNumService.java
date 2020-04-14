@@ -22,5 +22,7 @@ public interface IYntDistrictPointNumService extends IService<YntDistrictPointNu
 
     List<YntDistrictPointNum> selectVillage(String areacode);
 
+    Boolean saveExcel(List<List<Object>> listByExcel) throws Exception;
+
 
 }

@@ -695,4 +695,9 @@ public class DateUtils {
         }
         return sfstr;
     }
+
+    public static void main(String[] args) {
+        String nowDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        System.out.println(nowDate);
+    }
 }

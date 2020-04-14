@@ -1747,4 +1747,10 @@ public class StringUtils {
         return tmpStr;
     }
 
+
+    public static void main(String[] args) {
+        String uuid = getUUID();
+        System.out.println(uuid);
+    }
+
 }

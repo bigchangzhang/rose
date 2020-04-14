@@ -33,10 +33,10 @@ public class ExcelUtils {
      * @throws Exception
      * https://www.cnblogs.com/zhenghengbin/p/9490511.html
      */
-    public List<List<Object>> getBankListByExcel(InputStream in, String fileName,int firstRowNum,int firstCellNum) throws Exception {
+    public static List<List<Object>> getBankListByExcel(InputStream in, String fileName,int firstRowNum,int firstCellNum) throws Exception {
         List<List<Object>> list = new ArrayList();
         //创建Excel工作薄
-        Workbook work = this.getWorkbook(in, fileName);
+        Workbook work = getWorkbook(in, fileName);
         if (null == work) {
             throw new Exception("创建Excel工作薄为空！");
         }
@@ -78,7 +78,7 @@ public class ExcelUtils {
      * @return
      * @throws Exception
      */
-    public Workbook getWorkbook(InputStream inStr, String fileName) throws Exception {
+    public static Workbook getWorkbook(InputStream inStr, String fileName) throws Exception {
         Workbook workbook = null;
         String fileType = fileName.substring(fileName.lastIndexOf("."));
         if (".xls".equals(fileType)) {
