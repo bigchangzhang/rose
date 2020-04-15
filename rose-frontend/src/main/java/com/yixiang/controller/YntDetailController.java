@@ -4,7 +4,9 @@ package com.yixiang.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixiang.data.entity.StdDistrict;
 import com.yixiang.data.entity.YntDetail;
+import com.yixiang.data.service.IStdDistrictService;
 import com.yixiang.data.service.IYntDetailService;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
@@ -38,6 +40,9 @@ public class YntDetailController {
     @Autowired
     IYntDetailService iYntDetailService;
 
+    @Autowired
+    IStdDistrictService iStdDistrictService;
+
     /**
      * 根据区县代码获取流水列表
      */
@@ -48,14 +53,16 @@ public class YntDetailController {
         QueryWrapper<YntDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("txnamt","cntprtacc");
         Page<YntDetail> page = new Page<>(size,20);
+        QueryWrapper<StdDistrict> stdDistrictQueryWrapper = new QueryWrapper<>();
+        stdDistrictQueryWrapper.eq("CODE_VALUE",area);
+        StdDistrict one = iStdDistrictService.getOne(stdDistrictQueryWrapper);
         try {
-
-            if (StringUtils.isEmpty(area) ||  "河北省".equals(area)) {
+            if (StringUtils.isEmpty(one.getCodeName()) ||  "河北省".equals(one.getCodeName())) {
                 IPage<YntDetail> page1 = iYntDetailService.page(page, queryWrapper);
                 List<YntDetail> records = page1.getRecords();
                 resultModel.set(0, "success",records.size(), records);
             }else {
-                queryWrapper.eq("city_name",area);
+                queryWrapper.eq("city_name",one.getCodeName());
                 IPage<YntDetail> page1 = iYntDetailService.page(page, queryWrapper);
                 List<YntDetail> records = page1.getRecords();
                 resultModel.set(0, "success", records.size(),records);

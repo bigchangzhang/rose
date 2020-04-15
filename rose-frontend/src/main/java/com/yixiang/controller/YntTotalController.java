@@ -76,10 +76,10 @@ public class YntTotalController {
             if ("2".equals(one.getType())){
                 list = iYntTotalService.selectCity(one.getCodeValue());
             }
-            if ("2".equals(one.getType())){
+            if ("3".equals(one.getType())){
                 list = iYntTotalService.selectArea(one.getCodeValue());
             }
-            if ("3".equals(one.getType())){
+            if ("4".equals(one.getType())){
                 list = iYntTotalService.selectVillage(one.getCodeValue());
             }
             if ("1".equals(one.getType())){
