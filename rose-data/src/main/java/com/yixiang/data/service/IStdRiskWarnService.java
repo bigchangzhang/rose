@@ -3,6 +3,8 @@ package com.yixiang.data.service;
 import com.yixiang.data.entity.StdRiskWarn;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 风险预警表 服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IStdRiskWarnService extends IService<StdRiskWarn> {
 
+    Boolean saveExcel(List<List<Object>> listByExcel,String batchCode) throws Exception;
 }

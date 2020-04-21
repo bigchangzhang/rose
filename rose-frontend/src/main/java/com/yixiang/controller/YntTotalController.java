@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,15 @@ public class YntTotalController {
 
             List<YntTotal> listToal = iYntTotalService.list(queryWrapper);
             for (YntTotal yntTotal : listToal) {
-                yntTotal.setHyPointProportion(hyPointProportion);
+                String s = String.valueOf(new BigDecimal(Double.parseDouble(hyPointProportion) * 100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                yntTotal.setHyPointProportion(s);
+                String round1 = String.valueOf(new BigDecimal(Double.parseDouble(yntTotal.getDoubleFiftyProportion())*100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                yntTotal.setDoubleFiftyProportion(round1);
+                String round2 = String.valueOf(new BigDecimal(Double.parseDouble(yntTotal.getDoubleTenProportion())*100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                yntTotal.setDoubleTenProportion(round2);
+                String round3 = String.valueOf(new BigDecimal(Double.parseDouble(yntTotal.getDoubleHundredProportion())*100).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                yntTotal.setDoubleHundredProportion(round3);
+
 
             }
             resultModel.set(0, "success", listToal);

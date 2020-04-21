@@ -82,6 +82,11 @@ public class YntDistrictPointNumController {
                 list = iYntDistrictPointNumService.selectVillage(one.getCodeValue());
             }
             //list = iYntDistrictPointNumService.list(yntDistrictPointNumQueryWrapper);
+            for (YntDistrictPointNum yntDistrictPointNum : list) {
+                String pointNum = yntDistrictPointNum.getPointNum();
+                long round = Math.round(Double.parseDouble(pointNum));
+                yntDistrictPointNum.setPointNum(String.valueOf(round));
+            }
             resultModel.set(0, "success", list);
         } catch (Exception e) {
             log.error("获取信息失败:{}",e);

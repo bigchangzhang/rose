@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixiang.data.entity.StdDistrict;
+import com.yixiang.data.entity.UploadLog;
 import com.yixiang.data.entity.YntDetail;
 import com.yixiang.data.service.IStdDistrictService;
+import com.yixiang.data.service.IUploadLogService;
 import com.yixiang.data.service.IYntDetailService;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
@@ -43,15 +45,31 @@ public class YntDetailController {
     @Autowired
     IStdDistrictService iStdDistrictService;
 
+    @Autowired
+    IUploadLogService iUploadLogService;
+
     /**
      * 根据区县代码获取流水列表
      */
     @ApiOperation(value = "交易监控")
     @RequestMapping(value = "/getDetailList",method = RequestMethod.GET)
     public Object getDetailList(String area,Integer size) {
+        if(StringUtils.isEmpty(area)){
+            area="130000";
+        }
+        QueryWrapper<UploadLog> uploadLogQueryWrapper = new QueryWrapper<>();
+        uploadLogQueryWrapper.eq("upload_moudel","yntDetail");
+        uploadLogQueryWrapper.eq("upload_status","S");
+        uploadLogQueryWrapper.orderByDesc("bacth_code");
+
+
+        List<UploadLog> list = iUploadLogService.list(uploadLogQueryWrapper);
+        UploadLog uploadLog = list.get(0);
+
         ResultModel resultModel = new ResultModel();
         QueryWrapper<YntDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("txnamt","cntprtacc");
+        queryWrapper.eq("bacth_code",uploadLog.getBacthCode());
         Page<YntDetail> page = new Page<>(size,20);
         QueryWrapper<StdDistrict> stdDistrictQueryWrapper = new QueryWrapper<>();
         stdDistrictQueryWrapper.eq("CODE_VALUE",area);
@@ -62,7 +80,7 @@ public class YntDetailController {
                 List<YntDetail> records = page1.getRecords();
                 resultModel.set(0, "success",records.size(), records);
             }else {
-                queryWrapper.eq("city_name",one.getCodeName());
+                queryWrapper.eq("city_name",one.getCodeName().replace("市", ""));
                 IPage<YntDetail> page1 = iYntDetailService.page(page, queryWrapper);
                 List<YntDetail> records = page1.getRecords();
                 resultModel.set(0, "success", records.size(),records);
@@ -72,6 +90,13 @@ public class YntDetailController {
             resultModel.set(1, "获取信息失败", null);
         }
         return resultModel;
+    }
+
+
+    public static void main(String[] args) {
+        String aa = "石家庄市";
+        String s = aa.replace("市", "");
+        System.out.println(s);
     }
 
 

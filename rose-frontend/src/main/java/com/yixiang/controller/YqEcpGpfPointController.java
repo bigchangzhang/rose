@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -41,6 +44,10 @@ public class YqEcpGpfPointController {
     @ApiOperation(value = "根据乡镇获取下面所有的服务店")
     @RequestMapping(value = "/getPointList",method = RequestMethod.GET)
     public Object getPointList(String area) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(3);
+        nf.setRoundingMode(RoundingMode.UP);
+        nf.setGroupingUsed(false);
         ResultModel resultModel = new ResultModel();
         try {
 
@@ -52,6 +59,11 @@ public class YqEcpGpfPointController {
 
             yqEcpGpfPointQueryWrapper.eq("jr_street", area);
             List<YqEcpGpfPoint> list = iYqEcpGpfPointService.list(yqEcpGpfPointQueryWrapper);
+            for (YqEcpGpfPoint yqEcpGpfPoint : list) {
+                String aum = yqEcpGpfPoint.getAum();
+                String aums = nf.format(Double.parseDouble(aum)/1000000);
+                yqEcpGpfPoint.setAum(aums);
+            }
             resultModel.set(0, "success", list);
         } catch (Exception e) {
             log.error("获取信息失败:{}",e);
@@ -67,6 +79,10 @@ public class YqEcpGpfPointController {
     @ApiOperation(value = "服务点详细信息")
     @RequestMapping(value = "/getPointAllInfoByCode",method = RequestMethod.GET)
     public Object getPointAllInfoByCode(String pointCode) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(3);
+        nf.setRoundingMode(RoundingMode.UP);
+        nf.setGroupingUsed(false);
         ResultModel resultModel = new ResultModel();
         try {
 
@@ -85,6 +101,10 @@ public class YqEcpGpfPointController {
             QueryWrapper<YqEcpGpfPoint> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("svcpnt_id",pointCode);
             YqEcpGpfPoint yqEcpGpfPoints = iYqEcpGpfPointService.getOne(queryWrapper);
+            String aum = yqEcpGpfPoints.getAum();
+
+            String aums =nf.format(Double.parseDouble(aum)/1000000);
+            yqEcpGpfPoints.setAum(aums);
 
 
             resultModel.set(0, "success", yqEcpGpfPoints);

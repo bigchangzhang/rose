@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,7 +23,7 @@ public interface IYntDistrictPointNumService extends IService<YntDistrictPointNu
 
     List<YntDistrictPointNum> selectVillage(String areacode);
 
-    Boolean saveExcel(List<List<Object>> listByExcel) throws Exception;
+    Map saveExcel(List<List<Object>> listByExcel, String batchCode) throws Exception;
 
 
 }
