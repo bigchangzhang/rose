@@ -41,7 +41,7 @@
 
         <version.fasterxml.jackson>2.9.4</version.fasterxml.jackson>
         <version.slf4j>1.7.25</version.slf4j>
-        <version.log4j2>2.10.0</version.log4j2>
+        <version.log4j2>2.13.3</version.log4j2>
         <version.commons.lang>3.7</version.commons.lang>
         <version.motan>0.2.3</version.motan>
         <version.quartz>2.2.1</version.quartz>
