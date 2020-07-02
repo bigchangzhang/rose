@@ -31,7 +31,7 @@
         <!--==========第三方插件========== -->
         <version.swagger>2.8.0</version.swagger>
         <version.druid.starter>1.1.10</version.druid.starter>
-        <version.mysql>8.0.11</version.mysql>
+        <version.mysql>8.0.16</version.mysql>
         <version.mybatisplus.starter>3.0.7.1</version.mybatisplus.starter>
         <version.lombok>1.16.20</version.lombok>
         <version.powermock>2.0.0</version.powermock>
