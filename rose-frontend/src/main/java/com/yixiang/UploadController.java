@@ -4,15 +4,19 @@ package com.yixiang;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.yixiang.data.entity.*;
+import com.yixiang.data.mapper.PartenSrveiwMapper;
 import com.yixiang.data.service.*;
 import com.yixiang.rose.common.utils.ExcelUtils;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -27,10 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/upload")
@@ -68,6 +69,17 @@ public class UploadController {
     @Autowired
     IStdTopService iStdTopService;
 
+    @Autowired
+    IYntTermCheckService iYntTermCheckService;
+
+    @Autowired
+    IPartenSrveiwService iPartenSrveiwService;
+
+    @Autowired
+    PartenSrveiwMapper partenSrveiwMapper;
+
+    @Autowired
+    IStdImmBtService iStdImmBtService;
 
 
 
@@ -92,6 +104,12 @@ public class UploadController {
                 is.close();
             }
             if("3".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"yntTermCheck.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行裕农通巡检明细数据模板.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
 
             }
             if("4".equals(fileid)){
@@ -119,6 +137,12 @@ public class UploadController {
                 is.close();
             }
             if("7".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"stdImmBt.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行裕农通蓝色按钮数据表.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
 
             }
             if("8".equals(fileid)){
@@ -180,10 +204,12 @@ public class UploadController {
         String nowDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String crDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Userlogin one = (Userlogin) request.getSession().getAttribute("user");
+        String moudel = "";
 
         ResultModel resultModel = new ResultModel();
         try {
             if("1".equals(fileId)){
+                moudel="stdRiskWarn";
                 List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 4, 0,true);
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","stdRiskWarn");
@@ -214,7 +240,8 @@ public class UploadController {
 
             }
             if("2".equals(fileId)){
-                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 4, 0,false,false,"1");
+                moudel="yntTrade";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 4, 0,false,false,"0");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","yntTrade");
                 queryWrapper.eq("upload_status","I");
@@ -264,11 +291,48 @@ public class UploadController {
                 }
             }
             if("3".equals(fileId)){
+                moudel="yntTermCheck";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 3, 0,true,true,"0");
+                QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("upload_moudel","yntTermCheck");
+                queryWrapper.eq("upload_status","I");
+                UploadLog logServiceOne = iUploadLogService.getOne(queryWrapper);
+                if (null != logServiceOne){
+                    resultModel.set(1, "导入失败，该模块有正在处理数据，请稍后重试", null);
+                }else {
+                    UploadLog uploadLog = new UploadLog();
+                    uploadLog.setBacthCode(nowDate);
+                    uploadLog.setCrTime(crDate);
+                    uploadLog.setCrUser("ccbhb");
+                    uploadLog.setUploadStatus("I");
+                    uploadLog.setUploadMoudel("yntTermCheck");
+                    iUploadLogService.save(uploadLog);
+                    Map map = iYntTermCheckService.saveExcel(listByExcel, nowDate);
+                    String hang = String.valueOf(map.get("hang"));
+                    Boolean boole = (Boolean) map.get("back");
+                    if (null ==boole || false==boole) {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", "yntTermCheck");
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("E");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(1, "导入失败，数据第" + hang + "行数据异常", null);
+                    } else {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", "yntTermCheck");
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("S");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(0, "导入成功", null);
 
-
+                    }
+                }
             }
             if("4".equals(fileId)){
-                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"1");
+                moudel="yqEcpGpfPoint";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"0");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","yqEcpGpfPoint");
                 queryWrapper.eq("upload_status","I");
@@ -305,9 +369,9 @@ public class UploadController {
 
                     }
                 }
-
                 }
             if("5".equals(fileId)){
+                moudel="yntDetail";
                 List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 3, 0,false,false,"0");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","yntDetail");
@@ -342,13 +406,12 @@ public class UploadController {
                         logServiceOnes.setUploadStatus("S");
                         boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
                         resultModel.set(0, "导入成功", null);
-
-
                     }
                 }
 
             }
             if("6".equals(fileId)){
+                moudel="yntDistrictPointNum";
                 List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"0");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","yntDistrictPointNum");
@@ -389,9 +452,47 @@ public class UploadController {
 
             }
             if("7".equals(fileId)){
+                moudel="stdImmBt";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 3, 0,true,false,"0");
+                QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("upload_moudel","stdImmBt");
+                queryWrapper.eq("upload_status","I");
+                UploadLog logServiceOne = iUploadLogService.getOne(queryWrapper);
+                if (null != logServiceOne){
+                    resultModel.set(1, "导入失败，该模块有正在处理数据，请稍后重试", null);
+                }else {
+                    UploadLog uploadLog = new UploadLog();
+                    uploadLog.setBacthCode(nowDate);
+                    uploadLog.setCrTime(crDate);
+                    uploadLog.setCrUser("ccbhb");
+                    uploadLog.setUploadStatus("I");
+                    uploadLog.setUploadMoudel("stdImmBt");
+                    iUploadLogService.save(uploadLog);
+                    Map map = iStdImmBtService.saveExcel(listByExcel, nowDate);
+                    String hang = String.valueOf(map.get("hang"));
+                    Boolean boole = (Boolean) map.get("back");
+                    if (null ==boole || false==boole) {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", "stdImmBt");
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("E");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(1, "导入失败，数据第" + hang + "行数据异常", null);
+                    } else {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", "stdImmBt");
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("S");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(0, "导入成功", null);
+                    }
+                }
 
             }
             if("8".equals(fileId)){
+                moudel="stdCompositeViewProvince";
                // List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"1");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","stdCompositeViewProvince");
@@ -432,6 +533,7 @@ public class UploadController {
 
             }
             if("9".equals(fileId)){
+                moudel="stdCompositeViewCity";
                 // List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"1");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","stdCompositeViewCity");
@@ -471,6 +573,7 @@ public class UploadController {
                 }
             }
             if("10".equals(fileId)){
+                moudel="yntTotal";
                 //List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"1");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","yntTotal");
@@ -512,6 +615,7 @@ public class UploadController {
 
             }
             if("11".equals(fileId)){
+                moudel="stdTop";
                 //List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"1");
                 QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("upload_moudel","stdTop");
@@ -553,8 +657,80 @@ public class UploadController {
             }
         } catch (Exception e) {
             resultModel.set(1, "导入失败，系统异常", null);
-            e.printStackTrace();
+            QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+            queryWrappers.eq("upload_moudel", moudel);
+            queryWrappers.eq("bacth_code", nowDate);
+            UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+            logServiceOnes.setUploadStatus("E");
+            boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
         }
         return resultModel;
+    }
+
+    @PostMapping(value = "/salary/upload/srr")
+    public Object uploadSrr(HttpServletResponse response)throws Exception {
+        List<Map> list = new ArrayList();
+        ClassPathResource cpr = new ClassPathResource("/templates/"+"stdRiskWarn.xlsx");
+        InputStream is = cpr.getInputStream();
+        Workbook workbook = new XSSFWorkbook(is);
+        Sheet bumenshouru = workbook.createSheet("bumenshouru");
+        int row = 0;
+
+        List<PartenSrveiw> partenSrveiws = partenSrveiwMapper.selectNm();
+        for (PartenSrveiw partenSrveiw : partenSrveiws) {
+            List<Map> maph = partenSrveiwMapper.selectHeng(partenSrveiw.getPartenNm());
+            for (Map maph1 : maph) {
+                maph1.put("bumen",partenSrveiw.getPartenNm());
+            }
+            List<Map> mapz = partenSrveiwMapper.selectZong(partenSrveiw.getPartenNm());
+            for (Map mapz1 : mapz) {
+                mapz1.put("bumen",partenSrveiw.getPartenNm());
+            }
+            List<Map> mapg = partenSrveiwMapper.selectGao(partenSrveiw.getPartenNm());
+            for (Map mapg1 : mapg) {
+                mapg1.put("bumen",partenSrveiw.getPartenNm());
+            }
+            List<Map> maps = partenSrveiwMapper.selectSuo(partenSrveiw.getPartenNm());
+            for (Map maps1 : maps) {
+                maps1.put("bumen",partenSrveiw.getPartenNm());
+            }
+            row = maph.size()+mapz.size()+mapg.size()+maps.size();
+            list.addAll(maph);
+            list.addAll(mapz);
+            list.addAll(mapg);
+            list.addAll(maps);
+        }
+        HSSFRow rows;
+
+        HSSFCell cell;
+
+        for(int i = 0; i < list.size(); i++) {
+            Row row1 = bumenshouru.createRow(i);
+            for(int j = 0; j < list.get(i).size(); j++) {
+                Cell cell1 = row1.createCell(j);
+                Map map = list.get(i);
+                String bumen = (String) map.get("bumen");
+                String zhanghao = (String) map.get("zhanghao");
+                String years = (String) map.get("years");
+                String parten_sr = String.valueOf(map.get("parten_sr"));
+                if (j==0){
+                    cell1.setCellValue(bumen);
+                }
+                if (j==1){
+                    cell1.setCellValue(zhanghao);
+                }
+                if (j==2){
+                    cell1.setCellValue(years);
+                }
+                if (j==3){
+                    cell1.setCellValue(parten_sr);
+                }
+            }
+        }
+        String fileName = "bumenshouru.xlsx";
+        downLoadExcel(fileName, response, workbook);
+        is.close();
+        ResultModel resultModel = new ResultModel();
+        return null;
     }
 }
