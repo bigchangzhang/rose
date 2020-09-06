@@ -177,6 +177,14 @@ public class UploadController {
                 downLoadExcel(fileName, response, workbook);
                 is.close();
             }
+            if("12".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"yntTotalNew.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行涉农贷款及集体经济组织开户汇总数据模板.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

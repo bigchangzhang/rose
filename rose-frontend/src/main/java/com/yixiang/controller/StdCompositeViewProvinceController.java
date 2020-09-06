@@ -3,12 +3,10 @@ package com.yixiang.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yixiang.data.entity.StdCompositeViewCity;
-import com.yixiang.data.entity.StdCompositeViewProvince;
-import com.yixiang.data.entity.YntDetail;
-import com.yixiang.data.entity.YntTotal;
+import com.yixiang.data.entity.*;
 import com.yixiang.data.service.IStdCompositeViewCityService;
 import com.yixiang.data.service.IStdCompositeViewProvinceService;
+import com.yixiang.data.service.IYntTotalNewService;
 import com.yixiang.data.service.IYntTotalService;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
@@ -52,6 +50,9 @@ public class StdCompositeViewProvinceController {
 
     @Autowired
     IYntTotalService iYntTotalService;
+
+    @Autowired
+    IYntTotalNewService iYntTotalNewService;
 
     @ApiOperation(value = "获取地区")
     @RequestMapping(value = "query",method = RequestMethod.GET)
@@ -110,6 +111,58 @@ public class StdCompositeViewProvinceController {
                     stdCompositeViewProvinceList.add(stdCompositeViewProvince7);
                 }
 
+            }else if("7".equals(reportPlace.substring(0,1))){
+                List<YntTotalNew> ynt = iYntTotalNewService.getYnt("130000");
+                if ("711".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("711", yntTotalNew.getAreaName(), yntTotalNew.getXwkdye(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("721".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("721", yntTotalNew.getAreaName(), yntTotalNew.getXwkdkh(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("731".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("731", yntTotalNew.getAreaName(), yntTotalNew.getDyydye(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("741".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("741", yntTotalNew.getAreaName(), yntTotalNew.getDyydkh(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("751".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("751", yntTotalNew.getAreaName(), yntTotalNew.getNhkdye(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("761".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("761", yntTotalNew.getAreaName(), yntTotalNew.getNhkdkh(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+            }else if("8".equals(reportPlace.substring(0,1))){
+                List<YntTotalNew> ynt = iYntTotalNewService.getYnt("130000");
+                if ("811".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("811", yntTotalNew.getAreaName(), yntTotalNew.getJtjjh(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
+                if ("821".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewProvince stdCompositeViewProvince = setStdCompositeViewProvincemethodNew("821", yntTotalNew.getAreaName(), yntTotalNew.getJtjjxz(), null);
+                        stdCompositeViewProvinceList.add(stdCompositeViewProvince);
+                    }
+                }
             }else {
                stdCompositeViewProvinceList = iStdCompositeViewProvinceService.list(qr);
             }
@@ -161,6 +214,58 @@ public class StdCompositeViewProvinceController {
                     stdCompositeViewCityList.add(stdCompositeViewProvince7);
                 }
 
+            }else if("7".equals(reportPlace.substring(0,1))){
+                List<YntTotalNew> ynt = iYntTotalNewService.getYnt(provinceCode);
+                if ("711".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("711", yntTotalNew.getAreaName(), yntTotalNew.getXwkdye(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("721".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity  = setStdCompositeViewCityMethdNew("721", yntTotalNew.getAreaName(), yntTotalNew.getXwkdkh(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("731".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("731", yntTotalNew.getAreaName(), yntTotalNew.getDyydye(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("741".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("741", yntTotalNew.getAreaName(), yntTotalNew.getDyydkh(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("751".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("751", yntTotalNew.getAreaName(), yntTotalNew.getNhkdye(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("761".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("761", yntTotalNew.getAreaName(), yntTotalNew.getNhkdkh(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+            }else if("8".equals(reportPlace.substring(0,1))){
+                List<YntTotalNew> ynt = iYntTotalNewService.getYnt(provinceCode);
+                if ("811".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("811", yntTotalNew.getAreaName(), yntTotalNew.getJtjjh(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
+                if ("821".equals(reportPlace)){
+                    for (YntTotalNew yntTotalNew : ynt) {
+                        StdCompositeViewCity stdCompositeViewCity = setStdCompositeViewCityMethdNew("821", yntTotalNew.getAreaName(), yntTotalNew.getJtjjxz(), null,yntTotalNew.getAreaCode());
+                        stdCompositeViewCityList.add(stdCompositeViewCity);
+                    }
+                }
             }else {
                 stdCompositeViewCityList = iStdCompositeViewCityService.list(qee);
             }
@@ -184,6 +289,25 @@ public class StdCompositeViewProvinceController {
     private StdCompositeViewCity setStdCompositeViewCityMethd(String abscissaAxis,String verticalAxisA,String verticalAxisB,String areaCode){
         StdCompositeViewCity stdCompositeViewCity = new StdCompositeViewCity();
         stdCompositeViewCity.setReportPlace("211");
+        stdCompositeViewCity.setAbscissaAxis(abscissaAxis);
+        stdCompositeViewCity.setVerticalAxisA(verticalAxisA);
+        stdCompositeViewCity.setVerticalAxisB(verticalAxisB);
+        stdCompositeViewCity.setCityCode(areaCode);
+        return stdCompositeViewCity;
+    }
+
+    private StdCompositeViewProvince setStdCompositeViewProvincemethodNew(String reportPlace,String abscissaAxis,String verticalAxisA,String verticalAxisB){
+        StdCompositeViewProvince stdCompositeViewProvince = new StdCompositeViewProvince();
+        stdCompositeViewProvince.setReportPlace(reportPlace);
+        stdCompositeViewProvince.setAbscissaAxis(abscissaAxis);
+        stdCompositeViewProvince.setVerticalAxisA(verticalAxisA);
+        stdCompositeViewProvince.setVerticalAxisB(verticalAxisB);
+        return stdCompositeViewProvince;
+    }
+
+    private StdCompositeViewCity setStdCompositeViewCityMethdNew(String reportPlace,String abscissaAxis,String verticalAxisA,String verticalAxisB,String areaCode){
+        StdCompositeViewCity stdCompositeViewCity = new StdCompositeViewCity();
+        stdCompositeViewCity.setReportPlace(reportPlace);
         stdCompositeViewCity.setAbscissaAxis(abscissaAxis);
         stdCompositeViewCity.setVerticalAxisA(verticalAxisA);
         stdCompositeViewCity.setVerticalAxisB(verticalAxisB);
