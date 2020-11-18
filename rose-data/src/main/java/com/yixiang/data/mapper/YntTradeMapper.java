@@ -19,7 +19,7 @@ import java.util.Map;
 public interface YntTradeMapper extends BaseMapper<YntTrade> {
 
     @Select("<script>"
-            +"select trade_type,trade_name,SUM(count) as count from ynt_trade GROUP BY trade_type,trade_name;"
+            +"select trade_type,trade_name,SUM(count) as count from ynt_trade GROUP BY trade_type,trade_name"
             +"</script>")
     List<Map> selectProInfo();
 

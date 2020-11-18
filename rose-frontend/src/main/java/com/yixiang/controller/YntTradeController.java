@@ -64,45 +64,43 @@ public class YntTradeController {
             int count = iYqEcpGpfPointService.count();
 
             QueryWrapper<UploadLog> uploadLogQueryWrapper = new QueryWrapper<>();
-                uploadLogQueryWrapper.eq("upload_moudel","yntTrade");
-                uploadLogQueryWrapper.eq("upload_status","S");
-                uploadLogQueryWrapper.orderByDesc("bacth_code");
+            uploadLogQueryWrapper.eq("upload_moudel","yntTrade");
+            uploadLogQueryWrapper.eq("upload_status","S");
+            uploadLogQueryWrapper.orderByDesc("bacth_code");
 
 
-                List<UploadLog> list = iUploadLogService.list(uploadLogQueryWrapper);
-                UploadLog uploadLog = list.get(0);
+            List<UploadLog> list = iUploadLogService.list(uploadLogQueryWrapper);
+            UploadLog uploadLog = list.get(0);
 
-                QueryWrapper<YntTrade> queryWrapper = new QueryWrapper<>();
-                queryWrapper.eq("area", area);
-                queryWrapper.orderByDesc("count");
-                queryWrapper.eq("bacth_code", uploadLog.getBacthCode());
+            QueryWrapper<YntTrade> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("area", area);
+            queryWrapper.orderByDesc("count");
+            queryWrapper.eq("bacth_code", uploadLog.getBacthCode());
 
-                List<YntTrade> yntTrades = new ArrayList<>();
-                if ("130000".equals(area)){
-                     yntTrades = iYntTradeService.orderBYcountList(area);
-                    for (YntTrade yntTrade : yntTrades) {
-                        Double count1 = Double.parseDouble(yntTrade.getCount());
-                        String s = nf.format((count1 / count)*100);
-                        yntTrade.setMix(s);
-                    }
-                }else {
-                     yntTrades = iYntTradeService.orderBYcountList(area);
-                    for (YntTrade yntTrade : yntTrades) {
-                        String s =  nf.format(Double.parseDouble(yntTrade.getMix())*100);
-                        yntTrade.setMix(s);
-
-                    }
+            List<YntTrade> yntTrades = new ArrayList<>();
+            if ("130000".equals(area)){
+                 yntTrades = iYntTradeService.orderBYcountList(area);
+                for (YntTrade yntTrade : yntTrades) {
+                    Double count1 = Double.parseDouble(yntTrade.getCount());
+                    String s = nf.format((count1 / count)*100);
+                    yntTrade.setMix(s);
                 }
+            }else {
+                 yntTrades = iYntTradeService.orderBYcountList(area);
+                for (YntTrade yntTrade : yntTrades) {
+                    String s =  nf.format(Double.parseDouble(yntTrade.getMix())*100);
+                    yntTrade.setMix(s);
 
-
-                if (yntTrades.size() >8){
-                    List<YntTrade> yntTrades1 = yntTrades.subList(0, 8);
-                    resultModel.set(0, "success", yntTrades1);
-                }else {
-                    resultModel.set(0, "success", yntTrades);
                 }
+            }
 
 
+            if (yntTrades.size() >8){
+                List<YntTrade> yntTrades1 = yntTrades.subList(0, 8);
+                resultModel.set(0, "success", yntTrades1);
+            }else {
+                resultModel.set(0, "success", yntTrades);
+            }
         } catch (Exception e) {
             log.error("获取信息失败,异常信息{}", e);
             resultModel.set(1, "获取信息失败", null);

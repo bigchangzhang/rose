@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.StdNotmchInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.StdNotmchInfo">
+    <result column="id" property="id" />
+        <result column="org_code" property="orgCode" />
+        <result column="org_name" property="orgName" />
+        <result column="mch_code" property="mchCode" />
+        <result column="mch_name" property="mchName" />
+        <result column="notmch_status" property="notmchStatus" />
+        <result column="up_one" property="upOne" />
+        <result column="up_two" property="upTwo" />
+        <result column="up_three" property="upThree" />
+        <result column="up_four" property="upFour" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        org_code, org_name, mch_code, mch_name, notmch_status, up_one, up_two, up_three, up_four
+    </sql>
+
+</mapper>

@@ -2,14 +2,8 @@ package com.yixiang.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yixiang.data.entity.StdDistrict;
-import com.yixiang.data.entity.YntDistrictPointNum;
-import com.yixiang.data.entity.YntTotal;
-import com.yixiang.data.entity.YntTotalNew;
-import com.yixiang.data.service.IStdDistrictService;
-import com.yixiang.data.service.IYntDistrictPointNumService;
-import com.yixiang.data.service.IYntTotalNewService;
-import com.yixiang.data.service.IYntTotalService;
+import com.yixiang.data.entity.*;
+import com.yixiang.data.service.*;
 import com.yixiang.rose.common.utils.ResultModel;
 import com.yixiang.rose.common.utils.StringUtils;
 import io.swagger.annotations.Api;
@@ -53,6 +47,10 @@ public class YntTotalController {
     @Autowired
     IYntTotalNewService iYntTotalNewService;
 
+    @Autowired
+    IYntTotalPtService iYntTotalPtService;
+
+
 
     /**
      * 点击市查询 活跃数量和双十占比
@@ -78,7 +76,6 @@ public class YntTotalController {
             StdDistrict one = iStdDistrictService.getOne(queryWrappers);
             YntDistrictPointNum list = new YntDistrictPointNum();
 
-            QueryWrapper<YntDistrictPointNum> yntDistrictPointNumQueryWrapper = new QueryWrapper<>();
             if ("2".equals(one.getType())){
                 list = iYntTotalService.selectCity(one.getCodeValue());
             }
@@ -134,9 +131,6 @@ public class YntTotalController {
                 return resultModel;
             }
             List<String> collect = stdDistricts.stream().map(s -> s.getCodeValue()).collect(Collectors.toList());
-
-
-
             QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
             queryWrapper.in("area_code",collect);
             //1助农贷款、2现金汇款、3定活互转、4转账汇款、5大额存单、6贷款、7生活缴费、8社保缴费
@@ -275,6 +269,142 @@ public class YntTotalController {
             log.error("获取信息失败:{}",e);
             resultModel.set(1, "获取信息失败", null);
         }
+        return resultModel;
+    }
+
+
+    /**
+     * workType业务类型
+     */
+    @ApiOperation(value = "黄色按钮查询")
+    @RequestMapping(value = "/getGroupLeftInfoByTypeNew",method = RequestMethod.GET)
+    public Object getGroupLeftInfoByTypeNew(String workType) {
+        ResultModel resultModel = new ResultModel();
+        try {
+            String area = "130000";
+            if (StringUtils.isEmpty(workType)) {
+                resultModel.set(1, "数据类型不允许为空！", null);
+                return resultModel;
+            }
+            QueryWrapper<StdDistrict> areaQuery = new QueryWrapper<>();
+            areaQuery.eq("PARENT_CODE",area);
+            List<StdDistrict> areaList = iStdDistrictService.list(areaQuery);
+            if(areaList.isEmpty()){
+                resultModel.set(1, "获取父级信息为空，当前地区{}", area);
+                return resultModel;
+            }
+            List<String> areaCodes = areaList.stream().map(r -> r.getCodeValue()).collect(Collectors.toList());
+
+            if("27".equals(workType)){
+                resultModel = getOldTotle("znqk_year_num",workType,areaCodes);
+            }else if("28".equals(workType)){
+                resultModel = getOldTotle("xjhk_year_num",workType,areaCodes);
+            }else if("29".equals(workType)){
+                resultModel =getOldTotle("dhhz_year_num",workType,areaCodes);
+            }else if("30".equals(workType)){
+                resultModel =getOldTotle("zzhk_year_num",workType,areaCodes);
+            }else if("31".equals(workType)){
+                resultModel = getOldTotle("decd_num",workType,areaCodes);
+            }else if("32".equals(workType)){
+                resultModel = getOldTotle("shjf_num",workType,areaCodes);
+            }else if("33".equals(workType)){
+                resultModel =getOldTotle("sbjf_num",workType,areaCodes);
+            }else if("26".equals(workType)){
+                QueryWrapper<YntTotalNew> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in("area_code",areaCodes);
+                queryWrapper.orderByDesc("xwkdye");
+                List<YntTotalNew> list = iYntTotalNewService.list(queryWrapper);
+                List<List<YntTotalNew>> yntTotalNews = new ArrayList<>();
+                int toIndex = 4;
+                for (int i = 0; i < list.size(); i+=4) {
+                    if (i+4>list.size()) {
+                        toIndex = list.size() - i;
+                    }
+                    List<YntTotalNew> newList = list.subList(i, i+toIndex);
+                    yntTotalNews.add(newList);
+                }
+                resultModel.set(0, "success", yntTotalNews);
+            }else if("34".equals(workType)){
+                QueryWrapper<YntTotalNew> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in("area_code",areaCodes);
+                queryWrapper.orderByDesc("jtjjh");
+                List<YntTotalNew> list = iYntTotalNewService.list(queryWrapper);
+                List<List<YntTotalNew>> yntTotalNews = new ArrayList<>();
+                int toIndex = 4;
+                for (int i = 0; i < list.size(); i+=4) {
+                    if (i+4>list.size()) {
+                        toIndex = list.size() - i;
+                    }
+                    List<YntTotalNew> newList = list.subList(i, i+toIndex);
+                    yntTotalNews.add(newList);
+                }
+                resultModel.set(0, "success", yntTotalNews);
+            }else {
+                QueryWrapper<YntTotalPt> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in("area_code",areaCodes);
+                //19大屏设备、20App用户、21访问量、22平台续费、23平台买卖、24平台撮合、25基、26贷款
+                if("19".equals(workType)){
+                    queryWrapper.orderByDesc("dpsbs");
+                }
+                if("20".equals(workType)){
+                    queryWrapper.orderByDesc("yhzcs");
+                }
+                if("21".equals(workType)){
+                    queryWrapper.orderByDesc("dpfwl");
+                }
+                if("22".equals(workType)){
+                    queryWrapper.orderByDesc("ptjfbs");
+                }
+                if("23".equals(workType)){
+                    queryWrapper.orderByDesc("ptmmbs");
+                }
+                if("24".equals(workType)){
+                    queryWrapper.orderByDesc("ptchfbbs");
+                }
+                if("25".equals(workType)){
+                    queryWrapper.orderByDesc("yntbye");
+                }
+                //queryWrapper.last("limit " + size);
+                List<YntTotalPt> list = iYntTotalPtService.list(queryWrapper);
+                List<List<YntTotalPt>> yntTotals = new ArrayList<>();
+                int toIndex = 4;
+                for (int i = 0; i < list.size(); i+=4) {
+                    if (i+4>list.size()) {
+                        toIndex = list.size() - i;
+                    }
+                    List<YntTotalPt> newList = list.subList(i, i+toIndex);
+                    yntTotals.add(newList);
+                }
+                resultModel.set(0, "success", yntTotals);
+            }
+
+
+
+        } catch (Exception e) {
+            log.error("获取信息失败:{}",e);
+            resultModel.set(1, "获取信息失败", null);
+        }
+        return resultModel;
+    }
+
+
+    private ResultModel getOldTotle(String columns,String workType,List<String> areaCodes){
+        ResultModel resultModel = new ResultModel();
+        QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("area_code",areaCodes);
+        queryWrapper.orderByDesc(columns);
+        //queryWrapper.last("limit " + size);
+        List<YntTotal> list = iYntTotalService.list(queryWrapper);
+        List<List<YntTotal>> yntTotals = new ArrayList<>();
+        int toIndex = 4;
+        for (int i = 0; i < list.size(); i+=4) {
+            if (i+4>list.size()) {
+                toIndex = list.size() - i;
+            }
+            List<YntTotal> newList = list.subList(i, i+toIndex);
+            yntTotals.add(newList);
+        }
+        resultModel.set(0, "success", yntTotals);
         return resultModel;
     }
 

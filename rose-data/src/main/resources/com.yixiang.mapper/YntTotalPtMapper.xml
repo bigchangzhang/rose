@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.data.mapper.YntTotalPtMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.data.entity.YntTotalPt">
+        <id column="area_code" property="areaCode" />
+        <result column="area_name" property="areaName" />
+        <result column="dpsbs" property="dpsbs" />
+        <result column="kjl" property="kjl" />
+        <result column="yhzcs" property="yhzcs" />
+        <result column="ktqbs" property="ktqbs" />
+        <result column="dpfwl" property="dpfwl" />
+        <result column="appfwl" property="appfwl" />
+        <result column="ptjfje" property="ptjfje" />
+        <result column="ptjfbs" property="ptjfbs" />
+        <result column="ptmmje" property="ptmmje" />
+        <result column="ptmmbs" property="ptmmbs" />
+        <result column="ptchfbbs" property="ptchfbbs" />
+        <result column="yntbye" property="yntbye" />
+        <result column="qtjjye" property="qtjjye" />
+        <result column="bacth_code" property="bacthCode" />
+        <result column="coo" property="coo" />
+        <result column="ctt" property="ctt" />
+        <result column="cth" property="cth" />
+        <result column="cfo" property="cfo" />
+        <result column="p_code" property="pCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_name, area_code, dpsbs, kjl, yhzcs, ktqbs, dpfwl, appfwl, ptjfje, ptjfbs, ptmmje, ptmmbs, ptchfbbs, yntbye, qtjjye, bacth_code, coo, ctt, cth, cfo, p_code
+    </sql>
+
+</mapper>

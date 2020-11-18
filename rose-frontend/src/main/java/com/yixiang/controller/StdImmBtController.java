@@ -38,9 +38,6 @@ public class StdImmBtController {
         ResultModel resultModel = new ResultModel();
         try {
             List<StdImmBt> btList = iStdImmBtService.list();
-            //Map<String, List<StdImmBt>> listMap = btList.stream().collect(Collectors.groupingBy(b -> b.getBtType()));
-
-
             StdImmBt jRstdImmBt = new StdImmBt();
             StdImmBt bMstdImmBt = new StdImmBt();
             StdImmBt zWstdImmBt = new StdImmBt();
@@ -50,8 +47,6 @@ public class StdImmBtController {
             objects.add(bMstdImmBt);
             objects.add(zWstdImmBt);
             objects.add(jZstdImmBt);
-
-
             for (StdImmBt stdImmBt : btList) {
                 if ("金融服务".equals(stdImmBt.getBtType())){
                     putSomeValue(jRstdImmBt, stdImmBt);
@@ -90,4 +85,31 @@ public class StdImmBtController {
     }
 
 
+    @RequestMapping(value = "/getBtListNew",method = RequestMethod.GET)
+    public Object getBtListNew() {
+        ResultModel resultModel = new ResultModel();
+        try {
+            List<StdImmBt> btList = iStdImmBtService.list();
+            StdImmBt yntfudImmBt = new StdImmBt();
+            StdImmBt yntptImmBt = new StdImmBt();
+            List<StdImmBt> objects = new ArrayList<>();
+            objects.add(yntfudImmBt);
+            objects.add(yntptImmBt);
+            for (StdImmBt stdImmBt : btList) {
+                if ("裕农通服务点".equals(stdImmBt.getBtType())){
+                    putSomeValue(yntfudImmBt, stdImmBt);
+                    yntfudImmBt.setBtType("裕农通服务点");
+                }
+                if ("裕农通平台".equals(stdImmBt.getBtType())){
+                    putSomeValue(yntptImmBt, stdImmBt);
+                    yntptImmBt.setBtType("裕农通平台");
+                }
+            }
+            resultModel.set(0, "success", objects);
+        }catch (Exception e){
+            log.error("获取信息失败:{}",e);
+            resultModel.set(1, "获取信息失败", null);
+        }
+        return resultModel;
+    }
 }

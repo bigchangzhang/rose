@@ -84,6 +84,15 @@ public class UploadController {
     @Autowired
     IYntTotalNewService iYntTotalNewService;
 
+    @Autowired
+    IStdNotmchInfoService iStdNotmchInfoService;
+
+    @Autowired
+    IStdNotmchAllService iStdNotmchAllService;
+
+    @Autowired
+    IYntTotalPtService iYntTotalPtService;
+
 
 
     @RequestMapping(value="/excelExport/{fileid}",method = RequestMethod.GET)
@@ -196,6 +205,30 @@ public class UploadController {
                 downLoadExcel(fileName, response, workbook);
                 is.close();
             }
+            if("14".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"stdNotmchInfo.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行不动服务点明细模板.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
+            }
+            if("15".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"stdNotmchAll.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行不动服务点数量模板.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
+            }
+            if("16".equals(fileid)){
+                ClassPathResource cpr = new ClassPathResource("/templates/"+"yntTotalPt.xlsx");
+                InputStream is = cpr.getInputStream();
+                Workbook workbook = new XSSFWorkbook(is);
+                String fileName = "河北分行裕农通平台指标汇总数据模板.xlsx";
+                downLoadExcel(fileName, response, workbook);
+                is.close();
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -219,6 +252,7 @@ public class UploadController {
     @PostMapping(value = "/salary/upload")
     public Object uploadSalary(String fileId,MultipartFile file,HttpServletRequest request)throws Exception {
         //1、风险预警2、合作视图3、巡检4、服务点信息5、流水6、服务点数据7、按钮8、省视图9、市视图10、按钮汇总11、服务点排名
+        //14不动户明细，15 不动服务点数量
         String nowDate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String crDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Userlogin one = (Userlogin) request.getSession().getAttribute("user");
@@ -732,6 +766,129 @@ public class UploadController {
                     uploadLog.setUploadMoudel(moudel);
                     iUploadLogService.save(uploadLog);
                     Map map = iYntTotalNewService.saveExcelCity(listByExcel, nowDate);
+                    String hang = String.valueOf(map.get("hang"));
+                    Boolean boole = (Boolean) map.get("back");
+                    if (null ==boole || false==boole) {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("E");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(1, "导入失败，数据第" + hang + "行数据异常", null);
+                    } else {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("S");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(0, "导入成功", null);
+
+                    }
+                }
+
+            }
+            if("14".equals(fileId)){
+                moudel="stdNotmchInfo";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"0");
+                QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("upload_moudel",moudel);
+                queryWrapper.eq("upload_status","I");
+                UploadLog logServiceOne = iUploadLogService.getOne(queryWrapper);
+                if (null != logServiceOne){
+                    resultModel.set(1, "导入失败，该模块有正在处理数据，请稍后重试", null);
+                }else {
+                    UploadLog uploadLog = new UploadLog();
+                    uploadLog.setBacthCode(nowDate);
+                    uploadLog.setCrTime(crDate);
+                    uploadLog.setCrUser("ccbhb");
+                    uploadLog.setUploadStatus("I");
+                    uploadLog.setUploadMoudel(moudel);
+                    iUploadLogService.save(uploadLog);
+                    Map map = iStdNotmchInfoService.saveExcel(listByExcel, nowDate);
+                    String hang = String.valueOf(map.get("hang"));
+                    Boolean boole = (Boolean) map.get("back");
+                    if (null ==boole || false==boole) {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("E");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(1, "导入失败，数据第" + hang + "行数据异常", null);
+                    } else {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("S");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(0, "导入成功", null);
+
+                    }
+                }
+
+            }
+            if("15".equals(fileId)){
+                moudel="stdNotmchAll";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"0");
+                QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("upload_moudel",moudel);
+                queryWrapper.eq("upload_status","I");
+                UploadLog logServiceOne = iUploadLogService.getOne(queryWrapper);
+                if (null != logServiceOne){
+                    resultModel.set(1, "导入失败，该模块有正在处理数据，请稍后重试", null);
+                }else {
+                    UploadLog uploadLog = new UploadLog();
+                    uploadLog.setBacthCode(nowDate);
+                    uploadLog.setCrTime(crDate);
+                    uploadLog.setCrUser("ccbhb");
+                    uploadLog.setUploadStatus("I");
+                    uploadLog.setUploadMoudel(moudel);
+                    iUploadLogService.save(uploadLog);
+                    Map map = iStdNotmchAllService.saveExcel(listByExcel, nowDate);
+                    String hang = String.valueOf(map.get("hang"));
+                    Boolean boole = (Boolean) map.get("back");
+                    if (null ==boole || false==boole) {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("E");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(1, "导入失败，数据第" + hang + "行数据异常", null);
+                    } else {
+                        QueryWrapper<UploadLog> queryWrappers = new QueryWrapper<>();
+                        queryWrappers.eq("upload_moudel", moudel);
+                        queryWrappers.eq("bacth_code", nowDate);
+                        UploadLog logServiceOnes = iUploadLogService.getOne(queryWrappers);
+                        logServiceOnes.setUploadStatus("S");
+                        boolean b = iUploadLogService.saveOrUpdate(logServiceOnes);
+                        resultModel.set(0, "导入成功", null);
+
+                    }
+                }
+
+            }
+            if("16".equals(fileId)){
+                moudel="yntTotalPt";
+                List<List<Object>> listByExcel = ExcelUtils.getBankListByExcel(file.getInputStream(), file.getOriginalFilename(), 2, 0,false,false,"0");
+                QueryWrapper<UploadLog> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("upload_moudel",moudel);
+                queryWrapper.eq("upload_status","I");
+                UploadLog logServiceOne = iUploadLogService.getOne(queryWrapper);
+                if (null != logServiceOne){
+                    resultModel.set(1, "导入失败，该模块有正在处理数据，请稍后重试", null);
+                }else {
+                    UploadLog uploadLog = new UploadLog();
+                    uploadLog.setBacthCode(nowDate);
+                    uploadLog.setCrTime(crDate);
+                    uploadLog.setCrUser("ccbhb");
+                    uploadLog.setUploadStatus("I");
+                    uploadLog.setUploadMoudel(moudel);
+                    iUploadLogService.save(uploadLog);
+                    Map map = iYntTotalPtService.saveExcel(listByExcel, nowDate);
                     String hang = String.valueOf(map.get("hang"));
                     Boolean boole = (Boolean) map.get("back");
                     if (null ==boole || false==boole) {

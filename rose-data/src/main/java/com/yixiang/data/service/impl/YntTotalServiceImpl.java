@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +65,6 @@ public class YntTotalServiceImpl extends ServiceImpl<YntTotalMapper, YntTotal> i
 
     @Override
     public Map saveExcel(MultipartFile file, String batchCode) throws Exception {
-
             Boolean back = true;
             Map map = new HashMap<>();
             try {
@@ -80,6 +80,7 @@ public class YntTotalServiceImpl extends ServiceImpl<YntTotalMapper, YntTotal> i
         }
 
     private Map save141(MultipartFile file, String batchCode) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.000");
         Boolean back = true;
         Map map = new HashMap<>();
         try {
@@ -151,23 +152,29 @@ public class YntTotalServiceImpl extends ServiceImpl<YntTotalMapper, YntTotal> i
                 List<Object> objects = list.get(0);
                 String areaCodes = String.valueOf(objectList.get(1));
                 Double znqk_year_num = Double.parseDouble(String.valueOf(objectList.get(2)));
-                Double znqk_year_money = Double.parseDouble(String.valueOf(objectList.get(3)));
+                Double znqk_year_money = Double.parseDouble(decimalFormat.format(String.valueOf(objectList.get(3))));
                 Double xjhk_year_num = Double.parseDouble(String.valueOf(objectList.get(4)));
-                Double xjhk_year_money = Double.parseDouble(String.valueOf(objectList.get(5)));
+                Double xjhk_year_money = Double.parseDouble(decimalFormat.format(String.valueOf(objectList.get(5))));
                 Double dhhz_year_num = Double.parseDouble(String.valueOf(objectList.get(6)));
-                Double dhhz_year_money = Double.parseDouble(String.valueOf(objectList.get(7)));
+                Double dhhz_year_money = Double.parseDouble(decimalFormat.format(String.valueOf(objectList.get(7))));
                 Double zzhk_year_num = Double.parseDouble(String.valueOf(objectList.get(8)));
-                Double zzhk_year_money = Double.parseDouble(String.valueOf(objectList.get(9)));
+                Double zzhk_year_money = Double.parseDouble(decimalFormat.format(String.valueOf(objectList.get(9))));
                 String decd_num = String.valueOf(objectList.get(10));
                 String decd_year_money = String.valueOf(objectList.get(11));
+                decd_year_money = decimalFormat.format(Double.parseDouble(decd_year_money));
                 String shjf_num = String.valueOf(objectList.get(12));
                 String shjf_year_money = String.valueOf(objectList.get(13));
+                shjf_year_money = decimalFormat.format(Double.parseDouble(shjf_year_money));
                 String sbjf_num = String.valueOf(objectList.get(14));
                 String sbjf_year_money = String.valueOf(objectList.get(15));
+                sbjf_year_money = decimalFormat.format(Double.parseDouble(sbjf_year_money));
                 String hy_point_num = String.valueOf(objectList.get(16));
                 String double_ten_proportion = String.valueOf(objectList.get(17));
+                double_ten_proportion = decimalFormat.format(Double.parseDouble(double_ten_proportion));
                 String double_fifty_proportion = String.valueOf(objectList.get(18));
+                double_fifty_proportion = decimalFormat.format(Double.parseDouble(double_fifty_proportion));
                 String double_hundred_proportion = String.valueOf(objectList.get(19));
+                double_hundred_proportion = decimalFormat.format(Double.parseDouble(double_hundred_proportion));
                 if (!StringUtils.isEmpty(areaCodes)) {
                     QueryWrapper<YntTotal> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("area_code", areaCodes);

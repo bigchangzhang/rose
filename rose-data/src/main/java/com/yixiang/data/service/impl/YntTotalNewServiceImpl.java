@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,7 @@ public class YntTotalNewServiceImpl extends ServiceImpl<YntTotalNewMapper, YntTo
     public Map saveExcel(List<List<Object>> listByExcel, String batchCode) throws Exception {
         Boolean back = true;
         Map map = new HashMap<>();
+        DecimalFormat decimalFormat = new DecimalFormat("0.000");
         try {
             for (List<Object> objectList : listByExcel) {
                 YntTotalNew yntTotalNew = new YntTotalNew();
@@ -62,10 +64,13 @@ public class YntTotalNewServiceImpl extends ServiceImpl<YntTotalNewMapper, YntTo
                 String areaCode= String.valueOf(objectList.get(1));
                 String dyydkh= String.valueOf(objectList.get(2));
                 String dyydye= String.valueOf(objectList.get(3));
+                dyydye = decimalFormat.format(Double.parseDouble(dyydye));
                 String nhkdkh= String.valueOf(objectList.get(4));
                 String nhkdye= String.valueOf(objectList.get(5));
+                nhkdye = decimalFormat.format(Double.parseDouble(nhkdye));
                 String xwkdkh= String.valueOf(objectList.get(6));
                 String xwkdye= String.valueOf(objectList.get(7));
+                xwkdye = decimalFormat.format(Double.parseDouble(xwkdye));
                 String jtjjh= String.valueOf(objectList.get(8));
                 String jtjjxz= String.valueOf(objectList.get(9));
                 String pCode= String.valueOf(objectList.get(10));
@@ -104,6 +109,7 @@ public class YntTotalNewServiceImpl extends ServiceImpl<YntTotalNewMapper, YntTo
     public Map saveExcelCity(List<List<Object>> listByExcel, String batchCode) throws Exception {
         Boolean back = true;
         Map map = new HashMap<>();
+        DecimalFormat decimalFormat = new DecimalFormat("0.000");
         try {
             for (List<Object> objectList : listByExcel) {
                 YntTotalNew yntTotalNew = new YntTotalNew();
@@ -112,10 +118,13 @@ public class YntTotalNewServiceImpl extends ServiceImpl<YntTotalNewMapper, YntTo
                 String areaName= String.valueOf(objectList.get(1));
                 String dyydkh= String.valueOf(objectList.get(2));
                 String dyydye= String.valueOf(objectList.get(3));
+                dyydye = decimalFormat.format(Double.parseDouble(dyydye));
                 String nhkdkh= String.valueOf(objectList.get(4));
                 String nhkdye= String.valueOf(objectList.get(5));
+                nhkdye = decimalFormat.format(Double.parseDouble(nhkdye));
                 String xwkdkh= String.valueOf(objectList.get(6));
                 String xwkdye= String.valueOf(objectList.get(7));
+                xwkdye = decimalFormat.format(Double.parseDouble(xwkdye));
                 String jtjjh= String.valueOf(objectList.get(8));
                 String jtjjxz= String.valueOf(objectList.get(9));
                 //String pCode= String.valueOf(objectList.get(10));
