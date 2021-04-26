@@ -36,7 +36,7 @@
         <version.lombok>1.16.20</version.lombok>
         <version.powermock>2.0.0</version.powermock>
         <version.mockito>2.16.0</version.mockito>
-        <version.commons.io>2.6</version.commons.io>
+        <version.commons.io>2.7</version.commons.io>
         <version.javax.servlet>3.1.0</version.javax.servlet>
 
         <version.fasterxml.jackson>2.9.4</version.fasterxml.jackson>
